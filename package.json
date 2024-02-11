@@ -1,12 +1,13 @@
 {
     "dependencies": {
-        "near-api-js": "^3.0.2"
+        "moment": "^2.30.1",
+        "near-api-js": "^3.0.2",
+        "readline-sync": "^1.4.10"
     },
     "name": "near",
     "version": "1.0.0",
     "main": "index.js",
     "type": "module",
-    "devDependencies": {},
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     },

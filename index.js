@@ -41,7 +41,7 @@ const delay = (timeInMS) => {
                 }] claiming account ${ACCOUNT_ID}`
             );
 
-            const callContract = await wallet.functionCall({
+            await wallet.functionCall({
                 contractId: "game.hot.tg",
                 methodName: "claim",
                 args: {},
@@ -50,6 +50,7 @@ const delay = (timeInMS) => {
             // console.log(callContract);
         }
 
+        console.log("");
         console.log(`[ DELAY FOR ${delayTime} SECONDS ]`);
         await delay(delayTime);
     }
