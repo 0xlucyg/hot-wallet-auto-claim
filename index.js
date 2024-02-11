@@ -47,10 +47,10 @@ const delay = (timeInMS) => {
                 args: {},
             });
 
-            console.log(callContract);
+            // console.log(callContract);
         }
 
-        console.log(`[ DELAY FOR ${delayTime} SECONDS]`);
+        console.log(`[ DELAY FOR ${delayTime} SECONDS ]`);
         await delay(delayTime);
     }
 })();
