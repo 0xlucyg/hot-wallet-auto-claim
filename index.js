@@ -1,5 +1,6 @@
-import { connect, keyStores, KeyPair, Contract } from "near-api-js";
+import { connect, keyStores, KeyPair } from "near-api-js";
 import { readFileSync } from "fs";
+import moment from "moment";
 
 const delayTime = 115 * 60; // 1 jam 55 menit * 60 detik
 
@@ -33,19 +34,20 @@ const delay = (timeInMS) => {
             });
 
             const wallet = await connection.account(ACCOUNT_ID);
-            const contract = new Contract(wallet, "game.hot.tg", {
-                changeMethods: ["claim"],
-            });
 
             console.log(
-                `[${index + 1}/${
+                `[${moment().format("HH:mm:ss")}] [${index + 1}/${
                     listAccounts.length
                 }] claiming account ${ACCOUNT_ID}`
             );
-            const response = await contract.claim({
+
+            const callContract = await wallet.functionCall({
+                contractId: "game.hot.tg",
+                methodName: "claim",
                 args: {},
             });
-            console.log(response);
+
+            console.log(callContract);
         }
 
         console.log(`[ DELAY FOR ${delayTime} SECONDS]`);
