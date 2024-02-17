@@ -1,8 +1,9 @@
 import { connect, keyStores, KeyPair } from "near-api-js";
 import { readFileSync } from "fs";
 import moment from "moment";
+import { questionInt } from "readline-sync";
 
-const delayTime = 115 * 60; // 1 jam 55 menit * 60 detik
+const delayTime = 119 * 60; // 1 jam 59 menit * 60 detik
 
 const delay = (timeInMS) => {
     return new Promise((resolve) => {
@@ -18,10 +19,14 @@ const delay = (timeInMS) => {
      *
      */
 
+    const start = questionInt("input start number: ");
+    const stop = questionInt("input stop number: ");
+
     while (true) {
-        for (const [index, value] of listAccounts.entries()) {
+        for (let index = start; index <= stop; index++) {
             console.log("");
-            const [PRIVATE_KEY, ACCOUNT_ID] = value.split("|");
+            const [PRIVATE_KEY, ACCOUNT_ID] =
+                listAccounts[index - 1].split("|");
 
             const myKeyStore = new keyStores.InMemoryKeyStore();
             const keyPair = KeyPair.fromString(PRIVATE_KEY);
@@ -33,21 +38,38 @@ const delay = (timeInMS) => {
                 keyStore: myKeyStore,
             });
 
+            // connection.connection.provider
+            //     .query({
+            //         account_id: "game.hot.tg",
+            //         method_name: "get_user",
+            //         finality: "optimistic",
+            //         request_type: "call_function",
+            //         args_base64: Buffer.from(
+            //             JSON.stringify({ account_id: ACCOUNT_ID })
+            //         ).toString("base64"),
+            //     })
+            //     .then((res) => JSON.parse(Buffer.from(res.result).toString()))
+            //     .then((res) => {
+            //         console.log(res);
+            //     });
             const wallet = await connection.account(ACCOUNT_ID);
 
             console.log(
-                `[${moment().format("HH:mm:ss")}] [${index + 1}/${
+                `[${moment().format("HH:mm:ss")}] [${index}/${
                     listAccounts.length
                 }] claiming account ${ACCOUNT_ID}`
             );
+            try {
+                await wallet.functionCall({
+                    contractId: "game.hot.tg",
+                    methodName: "claim",
+                    args: {},
+                });
 
-            await wallet.functionCall({
-                contractId: "game.hot.tg",
-                methodName: "claim",
-                args: {},
-            });
-
-            // console.log(callContract);
+                // console.log(callContract);
+            } catch (error) {
+                console.log(error);
+            }
         }
 
         console.log("");
